@@ -6,7 +6,7 @@ import pandas as pd
 from requests_html import HTML
 import re
 
-BASE_DIR = os.path.dirname(__file__)
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
 
 
 def url_to_txt(url):
@@ -71,10 +71,12 @@ def run_scrape(start_year=None, end_year=None):
             print(f"Failed to parse and extract data for {year}")
 
     combined_df = pd.concat(dataframes, ignore_index=True)
-    path = os.path.join(BASE_DIR, 'data')
-    os.makedirs(path, exist_ok=True)
-    filepath = os.path.join(path, 'movies_data.csv')
+
+    os.makedirs(DATA_DIR, exist_ok=True)  
+    filepath = os.path.join(DATA_DIR, 'movies_data.csv')
+    combined_df = pd.concat(dataframes, ignore_index=True)
     combined_df.to_csv(filepath, index=False)
+    print(f"Data saved to {filepath}")
 
 if __name__ == "__main__":
     start = int(sys.argv[1]) if len(sys.argv) > 1 else None
